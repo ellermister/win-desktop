@@ -105,7 +105,8 @@ case WM_NCHITTEST: {
 - **原因**：`HintNone` (默认) 会给窗口添加 `WS_THICKFRAME` (可调大小边框)。在透明模式下，这个不可见的系统边框可能会导致窗口边缘出现不需要的白色或黑色轮廓。
 - **做法**：
   ```go
-  w.SetSize(400, 300, webview.HintFixed)
+  marginWidth := 12
+  w.SetSize(400+marginWidth*2, 300+marginWidth*2, webview.HintFixed)
   ```
   注意：这也意味着失去了拖拽边缘改变窗口大小的功能，需自行通过 HTML/JS 实现 Resizer。
 
@@ -145,7 +146,7 @@ body {
     background: rgba(40, 44, 52, 0.95); /* 窗口实际背景 */
     border-radius: 12px; /* 圆角 */
     box-shadow: 0 4px 20px rgba(0,0,0,0.5); /* 阴影 */
-    margin: 10px; /* 留出阴影空间 */
+    margin: 12px; /* 留出阴影空间 */
 }
 ```
 

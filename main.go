@@ -27,7 +27,9 @@ func main() {
 	defer w.Destroy()
 
 	w.SetTitle("异形/透明窗口示例")
-	w.SetSize(400, 300, webview.HintFixed)
+	// 窗口边距, 用于阴影，避免阴影被裁剪显示为直角
+	marginWidth := 12
+	w.SetSize(400+marginWidth*2, 300+marginWidth*2, webview.HintFixed)
 
 	// 绑定 Go 函数供 JS 调用
 	w.Bind("window_drag", func() {
@@ -65,12 +67,12 @@ func main() {
     
     /* 主容器：模拟窗口本体 */
     .app-container {
-      margin: 10px; /* 给阴影留出空间 */
-      width: calc(100% - 20px);
-      height: calc(100% - 20px);
+      margin: 12px; /* 给阴影留出空间 */
+      width: calc(100% - 24px);
+      height: calc(100% - 24px);
+      box-shadow: 0 0 12px rgba(0,0,0,0.95); /* 四周均匀、随圆角轮廓扩散的阴影 */
       background: rgba(40, 44, 52, 0.95); /* 深色半透明背景 */
       border-radius: 12px; /* 圆角 */
-      box-shadow: 0 4px 20px rgba(0,0,0,0.5); /* 窗口阴影 */
       display: flex;
       flex-direction: column;
       border: 1px solid rgba(255,255,255,0.1); /* 微弱的边框高光 */
