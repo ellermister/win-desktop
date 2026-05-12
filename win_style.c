@@ -21,6 +21,45 @@ void window_minimize(void* hwnd_ptr) {
     }
 }
 
+// 将窗口恢复、置前并获取焦点
+void window_focus(void* hwnd_ptr) {
+    HWND hwnd = (HWND)hwnd_ptr;
+    if (hwnd) {
+        if (IsIconic(hwnd)) {
+            ShowWindow(hwnd, SW_RESTORE);
+        }
+        BringWindowToTop(hwnd);
+        SetForegroundWindow(hwnd);
+        SetFocus(hwnd);
+    }
+}
+
+// 将子窗口放在父窗口附近，模拟常见桌面应用弹窗位置
+void window_position_near(void* hwnd_ptr, void* parent_ptr) {
+    HWND hwnd = (HWND)hwnd_ptr;
+    HWND parent = (HWND)parent_ptr;
+    if (!hwnd || !parent) return;
+
+    RECT parent_rect;
+    RECT child_rect;
+    if (!GetWindowRect(parent, &parent_rect) || !GetWindowRect(hwnd, &child_rect)) return;
+
+    int child_width = child_rect.right - child_rect.left;
+    int child_height = child_rect.bottom - child_rect.top;
+    int x = parent_rect.left + 48;
+    int y = parent_rect.top + 48;
+
+    SetWindowPos(hwnd, HWND_TOP, x, y, child_width, child_height, SWP_SHOWWINDOW);
+}
+
+// 启用或禁用窗口，用于实现模态对话框
+void window_set_enabled(void* hwnd_ptr, int enabled) {
+    HWND hwnd = (HWND)hwnd_ptr;
+    if (hwnd) {
+        EnableWindow(hwnd, enabled ? TRUE : FALSE);
+    }
+}
+
 // 将窗口设为分层窗口并设置整体透明度（0=全透明，255=不透明）
 // 同时可设置异形区域（圆角矩形）
 void apply_window_style(void* hwnd_ptr, int width, int height, unsigned char alpha, int rounded) {
@@ -56,5 +95,8 @@ void apply_window_style(void* hwnd_ptr, int width, int height, unsigned char alp
 
 void window_drag(void* hwnd_ptr) { (void)hwnd_ptr; }
 void window_minimize(void* hwnd_ptr) { (void)hwnd_ptr; }
+void window_focus(void* hwnd_ptr) { (void)hwnd_ptr; }
+void window_position_near(void* hwnd_ptr, void* parent_ptr) { (void)hwnd_ptr; (void)parent_ptr; }
+void window_set_enabled(void* hwnd_ptr, int enabled) { (void)hwnd_ptr; (void)enabled; }
 
 #endif
